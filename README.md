@@ -1,88 +1,142 @@
-# 🌍 YOMA Categorized Opportunities Scraper
-
-## 📋 Description
-
-The **YOMA Categorized Opportunities Scraper** is a Python tool that automatically searches and extracts current youth opportunities (like internships, scholarships, jobs, grants) using Google Search and AI-powered summarization. The script:
-
-- Uses the Google Search API to find links by category
-- Extracts full article content from each link (like a human, not using selectors)
-- Sends the content to Groq/ChatGPT to extract structured data
-- Filters for only relevant and current (2025+) opportunities
-- Saves the result in a downloadable CSV file
-- Generates short, styled summaries perfect for social media
-- Produces a categorized PDF and `.txt` version for sharing or archiving
-
-Supported categories include:
-- Scholarships
-- Internships
-- Jobs
-- Grants
-- Competitions
-- Workshops
-- Fellowships
-- Training
-- Conferences
-- Exchange Programs
-- Volunteering
-- Research
-- Agriculture
-- AI & Data Science
-- Business & Entrepreneurship
-- Career Development
-- Creative Industry
-- Environment & Climate
-- Technology & Digitization
-- Tourism & Hospitality
 
 ---
 
-## 🧰 Dependencies
+# 🧠 Kenyan Youth Opportunities Finder (2025 Edition)
 
-Install the required libraries using pip:
+This Python script is designed to help discover and extract **structured data about youth opportunities in Kenya for 2025**, such as **internships, fellowships, scholarships, grants**, and more. It leverages Google Custom Search, full-page content extraction, and Groq AI to intelligently return enriched, CSV-ready opportunity data.
 
-```bash
-pip install requests beautifulsoup4 googlesearch-python pymupdf reportlab tiktoken openai pandas
+---
+
+## 🔧 Features
+
+- ✅ Auto-generates **smart Google search queries** using Groq AI
+- 🔎 Searches authoritative sites (`.org`, `.gov`, `.edu`) for relevant links
+- 🧠 Extracts **full article content** (not just snippets)
+- 📊 Sends combined content to Groq for structured data extraction
+- 🧾 Saves enhanced CSV files with:
+  - Cleaned, deduplicated content
+  - Accurate, future `DateEnd` values
+  - Social media–ready summaries with emojis
+  - Auto-inferred skills, difficulty, effort, and more
+
+---
+
+## 📁 Folder Contents
+
+- `opportunities_*.csv`: Output CSV files with structured opportunity data
+- `main.py`: The main script file (your current code)
+
+---
+
+## 🧪 How It Works (Pipeline)
+
+1. **User selects a category and keyword(s)**
+2. Groq generates a Google query (with filters and 2025-specific operators)
+3. Script searches Google via **Custom Search API**
+4. Filters useful links, fetches their full content via `trafilatura`
+5. Bundles content and sends it to Groq AI for **structured parsing**
+6. Saves results into a clean, enriched `.csv`
+
+---
+
+## ⚙️ Configuration
+
+Update your API keys before running:
+
+```python
+GOOGLE_API_KEY = 'your-google-api-key'
+CSE_ID = 'your-custom-search-engine-id'
+GROQ_API_KEY = 'your-groq-api-key'
 ```
 
-If you're using Groq for summarization, ensure you also set your Groq API key in your environment variables.
+You can configure the number of results with:
 
----
-
-## ⚙️ How It Works
-
-1. **Search Generation**:  
-   ChatGPT/Groq generates targeted Google search queries per opportunity category.
-
-2. **Scraping**:  
-   The script searches Google using the generated queries, then visits each result and extracts the full readable text (ignoring HTML noise).
-
-3. **Summarization**:  
-   Full article content is sent to Groq/ChatGPT to:
-   - Detect the title, type, location, start/end dates
-   - Extract the opportunity description
-   - Create a 100–150 character summary post with hashtags and emojis
-
-4. **Filtering & Formatting**:
-   - Past or duplicate opportunities are removed
-   - Summaries outside the required length range are excluded
-   - Descriptions are trimmed to max 2000 characters
-   - Hidden column shows "Yes"/"No"
-   - 'ParticipantLimit' is renamed to 'Participants'
-
-5. **Output**:
-   - CSV with cleaned, categorized data
-   - PDF categorized by type for printing/distribution
-   - TXT file with styled social media-ready blurbs
-
----
-
-## 🖥️ Running the Script
-
-```bash
-python scraper.py
+```python
+NUM_RESULTS = 5  # Number of links to fetch per run
 ```
 
-Make sure your API keys (Groq or OpenAI) are properly configured in your environment.
 ---
 
+## 📌 Requirements
 
+Install dependencies:
+
+```bash
+pip install requests trafilatura
+```
+
+---
+
+## 🚀 Running the Script
+
+Run it directly:
+
+```bash
+python main.py
+```
+
+Note: For now, category and keyword selections are hardcoded or to be manually set in the script.
+
+---
+
+## 🧠 AI-Powered Smart Features
+
+- Uses **Groq (gemma2-9b-it)** for:
+  - Search query generation
+  - Opportunity content extraction and classification
+- Adds:
+  - Dates (auto-inferred and validated)
+  - Social-friendly `Summary` field (with 2 emojis)
+  - Descriptions (emoji-enhanced, capped at 2000 chars)
+  - Smart guesses for skills, difficulty, engagement, etc.
+
+---
+
+## 📝 Output Format
+
+Each row in the CSV contains:
+
+- Title, Type, Description, Summary (social-ready)
+- Location, Language, Skills, Difficulty
+- Dates (`DateStart`, `DateEnd`)
+- Category, Keywords, Engagement Type
+- ZltoReward fields, Hidden status, External ID
+- And more…
+
+---
+
+## 🛠️ Customization Tips
+
+- Change or add to the categories/keywords list
+- Adjust the emoji pool if needed
+- Tweak `NUM_RESULTS` for more or fewer results per run
+- Integrate into a frontend, LMS, or app
+
+---
+
+## 📥 Example Use Case
+
+Ideal for organizations building:
+
+- Youth opportunity dashboards
+- Scholarship aggregators
+- Training and upskilling portals
+- Social content automation tools
+
+---
+
+## 📬 Credits
+
+- Google Custom Search API
+- [Trafilatura](https://github.com/adbar/trafilatura) for full-content scraping
+- [Groq](https://groq.com/) + `gemma2-9b-it` for AI parsing
+
+---
+
+## 🧯 Caution
+
+- Make sure API limits (Google, Groq) are respected
+- Not suitable for scraping paywalled or private content
+- Emojis in summaries/descriptions are added programmatically—double-check for tone/appropriateness
+
+---
